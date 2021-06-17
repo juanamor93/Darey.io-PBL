@@ -5,7 +5,7 @@ To demonstrate a basic client-server using MySQL RDBMS, follow the below instruc
 Server A name - `mysql server`
 Server B name - `mysql client`
 ```
-![]()
+![instances](images/Project5/Project5-instances.png)
 * On `mysql server` Linux Server install MySQL Server software.
 ```
 sudo apt install mysql-server
