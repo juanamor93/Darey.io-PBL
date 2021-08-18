@@ -1,5 +1,5 @@
-#/bin/bash
-userfile=$(cat names.csv)#
+#!/bin/bash
+userfile=$(cat names.csv)
 PASSWORD=password
 
   if [ $(id -u) -eq 0 ]; then
@@ -8,16 +8,15 @@ PASSWORD=password
     for user in $userfile;
     do
         echo $user
-    if id "$user" &>/dev/null
+    if [ $(getent passwd $user) ];
     then
         echo "User exists"
     else
 # Create new user
-    useradd -m -d /home/$user -s /bin/bash -g developers $user
+    useradd -m -G developers -s /bin/bash $user
     echo "New user created"
-    echo    
+    echo
 # Create ssh folder in user home folder
-    su - -c "mkdir ~/.ssh" $user
     echo ".ssh directory created for new user"
     echo
 # Set user permission for ssh folder
@@ -33,16 +32,16 @@ PASSWORD=password
     echo "User permission for Authorized Key file set"
     echo
 # Create and set public key for users in the server
-    cp -R "/root/Shell/id_rsa.pub" "/home/$user/.ssh/authorized_keys"
+    cp -R "/home/ubuntu/Shell/id_rsa.pub" "/home/$user/.ssh/authorized_keys"
     echo "Copied Public Key to New User account on the server"
     echo
 
     echo "User created"
 # Generate a password
-    sudo echo -e "$PASSWORD\n$PASSWORD" | sudo passwd "$user"
-    sudo passwd -x 5 $user
-            fi
-        done
+sudo echo -e "$PASSWORD\n$PASSWORD" | sudo passwd "$user"
+sudo passwd -x 5 $user
+        fi
+    done
     else
     echo "Only Admin can onboard a user"
-    fi   
+    fi
